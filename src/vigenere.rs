@@ -1,13 +1,21 @@
 // vigenere cipher functions
 
-pub fn encode(input: &str, key: &str) -> String {
+pub fn encode(key: &str, input: &str) -> String {
     if !input.is_ascii() {
         return String::from(input);
     }
 
     let mut out = String::new();
-    let key_chars: Vec<char> = String::from(key).to_uppercase().chars().collect();
+    let key_chars: Vec<char> = String::from(key)
+        .to_uppercase()
+        .chars()
+        .filter(|x| x.is_alphabetic())
+        .collect();
     let key_len = key_chars.len();
+
+    if key_len == 0 {
+        return String::from(input);
+    }
 
     let mut i: usize = 0;
     for mut c in input.chars() {
@@ -28,7 +36,7 @@ pub fn encode(input: &str, key: &str) -> String {
     out
 }
 
-pub fn decode(input: &str, key: &str) -> String {
+pub fn decode(key: &str, input: &str) -> String {
     if !input.is_ascii() {
         return String::from(input);
     }
