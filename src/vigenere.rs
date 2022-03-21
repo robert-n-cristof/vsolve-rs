@@ -1,5 +1,39 @@
 // vigenere cipher functions
 
+struct Keyword {
+    vec: Vec<u8>,
+}
+
+impl Iterator for Keyword {
+    type Item = String;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let mut s = String::from("");
+
+        for n in &self.vec {
+            if n >= &26u8 {
+                return None;
+            }
+
+            let c = (n + 65) as char;
+            s.push(c);
+        }
+
+        // increment the vector(s)
+
+        for ix in (0..self.vec.len()).rev() {
+            self.vec[ix] += 1;
+            if ix > 0 && self.vec[ix] >= 26 {
+                self.vec[ix] = 0;
+            } else {
+                break;
+            }
+        }
+
+        Some(s)
+    }
+}
+
 pub fn encode(key: &str, input: &str) -> String {
     if !input.is_ascii() {
         return String::from(input);
@@ -62,4 +96,37 @@ pub fn decode(key: &str, input: &str) -> String {
     }
 
     out
+}
+
+pub fn brute_force(len: i32, input: &str) -> String {
+    let lower: i32;
+    let upper: i32;
+    let mut best_chi: f32 = 9999999999999.;
+    let mut best = String::from("");
+
+    if len > 0 {
+        lower = len;
+        upper = len;
+    } else if len < 0 {
+        lower = 1;
+        upper = len * -1;
+    } else {
+        return best;
+    }
+
+    for i in lower..=upper {
+        let key = Keyword {
+            vec: vec![0; i as usize],
+        };
+        for s in key {
+            let decoded = decode(s.as_str(), &input);
+            let chi = crate::stats::chi_squared(decoded.as_str(), &crate::english::FREQUENCY);
+            if chi < best_chi {
+                best_chi = chi;
+                best = s;
+            }
+        }
+    }
+
+    best
 }
