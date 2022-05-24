@@ -1,5 +1,6 @@
 // vigenere cipher functions
-
+use std::io::{stdout, Write};
+use std::time::{Duration, Instant};
 struct Keyword {
     vec: Vec<u8>,
 }
@@ -114,11 +115,31 @@ pub fn brute_force(len: i32, input: &str) -> String {
         return best;
     }
 
+    // measure time so we can periodically report where we are in the iterations below
+    let one_second = Duration::from_millis(100);
+    let mut now = Instant::now();
+    let mut buf = String::from("");
+    let mut stdout = stdout();
+
     for i in lower..=upper {
         let key = Keyword {
             vec: vec![0; i as usize],
         };
+
         for s in key {
+            if now.elapsed() > one_second {
+                // erase previous output (backspace)
+                let erase = (8 as char).to_string().repeat(buf.len());
+                print!("{}", erase);
+
+                // write current output
+                buf = s.clone();
+                print!("{}", buf);
+                stdout.flush().unwrap();
+
+                now = Instant::now();
+            }
+
             let decoded = decode(s.as_str(), &input);
             let chi = crate::stats::chi_squared(decoded.as_str(), &crate::english::FREQUENCY);
             if chi < best_chi {
@@ -126,6 +147,10 @@ pub fn brute_force(len: i32, input: &str) -> String {
                 best = s;
             }
         }
+    }
+
+    if buf.len() > 0 {
+        println!("");
     }
 
     best
