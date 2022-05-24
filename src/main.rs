@@ -65,6 +65,11 @@ fn main() {
         return;
     }
 
+    if !(key.chars().all(char::is_alphabetic)) {
+        println!("Key '{}' should not contain non-alphabetic characters", key);
+        return;
+    }
+
     let result = if m.opt_present("d") {
         vigenere::decode(key, &input)
     } else {
