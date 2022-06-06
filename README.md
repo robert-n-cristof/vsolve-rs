@@ -38,6 +38,7 @@ In order to achieve parity with PHP-based tools I've written for Vigenère ciphe
 
 - non-brute-force deciphering using Kasiski's method and other staticistical methods
 - dictionary mode brute force
+- keep and show the top N results (rather than just top 1); keep in priority queue (max heap) for efficiency
 
 Other todos:
 

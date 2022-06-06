@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Debug",
             "program": "${workspaceFolder}/target/debug/vsolve",
-            "args": ["-b3", "SX AKR ZO ZCBC FKVB DS AYQC ET USXF K KMYH RITGMEJ CILDILMI GX ILQPGCL. G RSNO XFSW MXI UYVIC ACVP."],
+            "args": ["SX AKR ZO ZCBC FKVB DS AYQC ET USXF K KMYH RITGMEJ CILDILMI GX ILQPGCL. G RSNO XFSW MXI UYVIC ACVP.", "-b"],
             // "args": ["-b3", "caesar", "EHV K NMV H XTLBVF VQYUCS AGUBGUKG"],
             "cwd": "${workspaceFolder}"
         }
